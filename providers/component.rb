@@ -73,7 +73,7 @@ def create_config_file
 end
 
 def create_service
-  t2 = template "/etc/init/#{new_resource.component_name}.conf" do
+  t = template "/etc/init/#{new_resource.component_name}.conf" do
     cookbook new_resource.upstart_file_cookbook
     source   new_resource.upstart_file
     mode     0644
@@ -89,7 +89,7 @@ def create_service
     )
     action :nothing
   end
-  t2.run_action(:create)
+  t.run_action(:create)
 
   l = link "/etc/init.d/#{new_resource.component_name}" do
     to "/lib/init/upstart-job"
@@ -97,7 +97,7 @@ def create_service
   end
   l.run_action(:create)
 
-  t1.updated_by_last_action? || l.updated_by_last_action?
+  t.updated_by_last_action? || l.updated_by_last_action?
 end
 
 def create_logrotate_config
